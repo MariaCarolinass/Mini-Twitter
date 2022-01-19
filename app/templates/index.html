@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+  <h4>Cadastre uma postagem</h4>
+  <form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.message.label }}<br>
+        {{ form.message() }}
+    </p>
+    <p>{{ form.submit() }}</p>
+  </form>
+
   <h1>Feed Mini-Twitter</h1>
+  {% for posts in posts %}<h4>{{ posts.message }}</h4>{% endfor %}
+
 {% endblock %}
