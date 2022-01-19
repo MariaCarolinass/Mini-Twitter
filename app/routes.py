@@ -3,12 +3,20 @@ from flask import render_template, flash, url_for, request, redirect
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
 from app.models import User, Post
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, RegisterPost
 
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', title='Início')
+    form = RegisterPost()
+    if form.validate_on_submit():
+        post = Post(message=form.message.data)
+        db.session.add(post)
+        db.session.commit()
+        flash('Parabéns, sua postagem foi cadastrada!')
+        return redirect(url_for('index'))
+    posts = Post.query.all()
+    return render_template('index.html', title='Início', form=form, posts=posts)
 
 @app.route('/logout')
 def logout():
