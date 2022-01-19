@@ -16,16 +16,31 @@ class User(db.Model):
     def __repr__(self):
         return '<Usuario {}>'.format(self.username)
 
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'nickname': self.nickname,
+            'email': self.email,
+            'password_hash': self.password_hash
+        }
+
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
-class Posts(db.Model):
+class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(180), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return '<Postagem {}>'.format(self.message)
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'message': self.username
+        }
