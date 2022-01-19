@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Mini-Twitter</title>
+  </head>
+  <body>
+    <a href="/index">Início</a>
+    {% if current_user.is_anonymous %}<a href="/login">Entrar</a>
+    {% else %}<a href="/logout">Sair</a>{% endif %}<hr>
+    {% block content %}{% endblock %}
+  </body>
+</html>
