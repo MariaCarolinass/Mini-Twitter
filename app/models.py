@@ -27,8 +27,7 @@ class User(UserMixin, db.Model):
             'id': self.id,
             'username': self.username,
             'nickname': self.nickname,
-            'email': self.email,
-            'password_hash': self.password_hash
+            'email': self.email
         }
 
     def set_password(self, password):
@@ -54,5 +53,5 @@ class Post(db.Model):
     def as_dict(self):
         return {
             'id': self.id,
-            'message': self.username
+            'message': self.message
         }
