@@ -8,6 +8,7 @@ from app.forms import LoginForm, RegistrationForm, RegisterPost
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
+    """Cadastra um novo post e exibe as postagens dos usuários"""
     form = RegisterPost()
     if form.validate_on_submit():
         post = Post(message=form.message.data, author=current_user)
@@ -20,12 +21,14 @@ def index():
 
 @app.route('/logout')
 def logout():
+    """Sair do login do usuário"""
     logout_user()
     return redirect(url_for('login'))
 
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """Autenticação do usuário"""
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -43,6 +46,7 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """Cadastrar um novo usuário"""
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegistrationForm()
