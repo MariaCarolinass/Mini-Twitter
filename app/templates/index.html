@@ -13,6 +13,8 @@
   </form>
 
   <h1>Feed Mini-Twitter</h1>
-  {% for posts in posts %}<h4>{{ posts.message }}</h4>{% endfor %}
+  {% for posts in posts %}
+    <p>{{ posts.author.username }}<br>{{ posts.message }}</p>
+  {% endfor %}
 
 {% endblock %}
