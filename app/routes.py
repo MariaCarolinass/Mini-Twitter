@@ -5,12 +5,12 @@ from werkzeug.urls import url_parse
 from app.models import User, Post
 from app.forms import LoginForm, RegistrationForm, RegisterPost
 
-@app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
+@login_required
 def index():
     form = RegisterPost()
     if form.validate_on_submit():
-        post = Post(message=form.message.data)
+        post = Post(message=form.message.data, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash('Parabéns, sua postagem foi cadastrada!')
@@ -21,8 +21,9 @@ def index():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
+@app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
