@@ -1,10 +1,31 @@
 from app import app, db
-from flask import render_template, flash, url_for, request, redirect
+from flask import render_template, flash, url_for, request, redirect, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
 from app.models import User, Post
 from app.forms import LoginForm, RegistrationForm, RegisterPost
 
+#API
+@app.route('/api', methods=['GET'])
+def Api_Info():
+    api_info = {'version': 'v1'}
+    return jsonify(api_info)
+
+@app.route('/api/register_users', methods=['GET'])
+def register_users():
+    """Cadastrar um novo usuário"""
+    users = User.query.all()
+    request_users = [r.as_dict() for r in users]
+    return jsonify(request_users)
+
+@app.route('/api/register_posts', methods=['GET'])
+def register_posts():
+    """Cadastrar uma nova postagem"""
+    posts = Post.query.all()
+    request_posts = [r.as_dict() for r in posts]
+    return jsonify(request_posts)
+
+#Funcionalidades
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
