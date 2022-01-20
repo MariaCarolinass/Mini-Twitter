@@ -8,19 +8,20 @@ from app.forms import LoginForm, RegistrationForm, RegisterPost
 #API
 @app.route('/api', methods=['GET'])
 def Api_Info():
+    """Informações da API"""
     api_info = {'version': 'v1'}
     return jsonify(api_info)
 
 @app.route('/api/register_users', methods=['GET'])
 def register_users():
-    """Cadastrar um novo usuário"""
+    """Carrega os dados dos usuários"""
     users = User.query.all()
     request_users = [r.as_dict() for r in users]
     return jsonify(request_users)
 
 @app.route('/api/register_posts', methods=['GET'])
 def register_posts():
-    """Cadastrar uma nova postagem"""
+    """Carrega os dados das postagens"""
     posts = Post.query.all()
     request_posts = [r.as_dict() for r in posts]
     return jsonify(request_posts)
