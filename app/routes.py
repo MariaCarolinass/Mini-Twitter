@@ -26,7 +26,7 @@ def register_posts():
     request_posts = [r.as_dict() for r in posts]
     return jsonify(request_posts)
 
-#Funcionalidades
+#Página principal
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
@@ -41,6 +41,7 @@ def index():
     posts = Post.query.all()
     return render_template('index.html', title='Início', form=form, posts=posts)
 
+#Funcionalidades de login e cadastro do usuário
 @app.route('/logout')
 def logout():
     """Sair do login do usuário"""
@@ -81,3 +82,34 @@ def register():
         flash('Parabéns, seu usuário foi cadastrado!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Cadastre-se', form=form)
+
+#Funcionalidades de seguir e parar de seguir usuário
+@app.route('/follow/<username>', methods=['GET', 'POST'])
+def follow(username):
+    """Seguir usuários"""
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('Usuário {} não encontrado.'.format(username))
+        return redirect(url_for('index'))
+    if user == current_user:
+        flash('Você não pode seguir a si mesmo!')
+        return redirect(url_for('index'))
+    current_user.follow(user)
+    db.session.commit()
+    flash('Você está seguindo {}!'.format(username))
+    return redirect(url_for('index'))
+
+@app.route('/unfollow/<username>', methods=['GET', 'POST'])
+def unfollow(username):
+    """Parar de seguir usuários"""
+    user = User.query.filter_by(username=username).first()
+    if user is None:
+        flash('Usuário {} não encontrado.'.format(username))
+        return redirect(url_for('index'))
+    if user == current_user:
+        flash('Você não pode deixar de seguir a si mesmo!')
+        return redirect(url_for('index'))
+    current_user.unfollow(user)
+    db.session.commit()
+    flash('Você deixou de seguir {}.'.format(username))
+    return redirect(url_for('index'))
