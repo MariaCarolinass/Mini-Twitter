@@ -5,9 +5,11 @@
     <title>Mini-Twitter</title>
   </head>
   <body>
-    <a href="/index">Início</a>
-    {% if current_user.is_anonymous %}<a href="/login">Entrar</a>
-    {% else %}<a href="/logout">Sair</a>{% endif %}<hr>
+    {% if current_user.is_anonymous %}
+      <a href="/login">Entrar</a>
+    {% else %}
+      <a href="/index">Início</a>
+      <a href="/logout">Sair</a>{% endif %}<hr>
     {% block content %}{% endblock %}
   </body>
 </html>
