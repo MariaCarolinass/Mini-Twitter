@@ -2,7 +2,7 @@
 
 {% block content %}
 
-  <h4>Cadastre uma postagem</h4>
+  <h1>Olá, seja bem vind@ {{ current_user }}!</h1>
   <form action="" method="post" novalidate>
     {{ form.hidden_tag() }}
     <p>
@@ -12,9 +12,9 @@
     <p>{{ form.submit() }}</p>
   </form>
 
-  <h1>Feed Mini-Twitter</h1>
+  <h2>Feed de postagens</h2>
   {% for posts in posts %}
-    <p>{{ posts.author.username }}
+    <p><b>{{ posts.author.username }}</b>
     {% if not current_user.is_following(posts.author) %}
       <a href="{{ url_for('follow', username=posts.author.username) }}">Seguir</a>
     {% else %}
