@@ -12,6 +12,13 @@ def Api_Info():
     api_info = {'version': 'v1'}
     return jsonify(api_info)
 
+@app.route('/api/token')
+@login_required
+def get_auth_token():
+    """Solicita token de autenticação"""
+    token = current_user.generate_auth_token()
+    return jsonify({'token': token.decode('ascii')})
+
 @app.route('/api/register_users', methods=['GET'])
 def register_users():
     """Carrega os dados dos usuários"""
