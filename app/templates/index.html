@@ -18,9 +18,18 @@
     {% if not current_user.is_following(posts.author) %}
       <a href="{{ url_for('follow', username=posts.author.username) }}">Seguir</a>
     {% else %}
-      <a href="{{ url_for('unfollow', username=posts.author.username) }}">Parar de seguir</a></p>
+      <a href="{{ url_for('unfollow', username=posts.author.username) }}">Parar
+        de seguir</a>
+    </p>
     {% endif %}
-    <p>{{ posts.message }}</p>
-  {% endfor %}
+    <p>{{ posts.message }}</p><br>
+  {% endfor %}<br>
+
+  {% if prev_url %}
+    <h4><a href="{{ prev_url }}">Voltar</a></h4>
+  {% endif %}
+  {% if next_url %}
+    <h4><a href="{{ next_url }}">Próxima página</a></h4>
+  {% endif %}
 
 {% endblock %}
