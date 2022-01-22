@@ -1,8 +1,10 @@
 from datetime import datetime
-from app import db, login
+from app import app, db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
+from itsdangerous import (TimedJSONWebSignatureSerializer
+                            as Serializer, BadSignature, SignatureExpired)
 
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
@@ -44,7 +46,34 @@ class User(UserMixin, db.Model):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
-            
+
+    def generate_auth_token(self, expiration=600):
+        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None     # Token válido, mas expirado
+        except BadSignature:
+            return None     # token inválido
+        user = User.query.get(data['id'])
+        return user
+
+    def verify_password(username_or_token, password):
+        # Autenticação por token
+        user = User.verify_auth_token(username_or_token)
+        if not user:
+            # Autenticação por email e senha
+            user = User.query.filter_by(username=username_or_token).first()
+            if not user or not user.verify_password(password):
+                return False
+            g.user = user
+            return True
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
