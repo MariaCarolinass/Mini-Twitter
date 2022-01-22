@@ -37,7 +37,7 @@ def register_posts():
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
-    """Cadastra um novo post e exibe as postagens dos usuários"""
+    """Cadastra e exibe uma nova postagem"""
     form = RegisterPost()
     if form.validate_on_submit():
         post = Post(message=form.message.data, author=current_user)
@@ -46,6 +46,7 @@ def index():
         flash('Parabéns, sua postagem foi cadastrada!')
         return redirect(url_for('index'))
     page = request.args.get('page', 1, type=int)
+    # Exibi todas as postagens que o usuário cadastra e dos usuários seguidos
     posts = current_user.followed_posts().paginate(
         page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('index', page=posts.next_num) \
@@ -60,9 +61,17 @@ def index():
 @login_required
 def explore():
     """Mostra todas as postagens de usuários"""
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
-    return render_template('explore.html', title='Explorar postagens',
-        posts=posts)
+    page = request.args.get('page', 1, type=int)
+    # Exibi todas as postagens, menos as postagens do usuário logado
+    posts = Post.query.filter(Post.user_id != current_user.id).order_by(
+        Post.timestamp.desc()).paginate(
+        page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('explore', page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('explore', page=posts.prev_num) \
+        if posts.has_prev else None
+    return render_template('explore.html', title='Encontrar postagens',
+        posts=posts.items, next_url=next_url, prev_url=prev_url)
 
 #Funcionalidades de login e cadastro do usuário
 @app.route('/logout')
