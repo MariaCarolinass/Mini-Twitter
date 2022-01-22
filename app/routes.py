@@ -12,6 +12,13 @@ def Api_Info():
     api_info = {'version': 'v1'}
     return jsonify(api_info)
 
+@app.route('/api/token')
+@login_required
+def get_auth_token():
+    """Solicita token de autenticação"""
+    token = current_user.generate_auth_token()
+    return jsonify({'token': token.decode('ascii')})
+
 @app.route('/api/register_users', methods=['GET'])
 def register_users():
     """Carrega os dados dos usuários"""
@@ -52,6 +59,7 @@ def index():
 @app.route('/explore')
 @login_required
 def explore():
+    """Mostra todas as postagens de usuários"""
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template('explore.html', title='Explorar postagens',
         posts=posts)
@@ -59,14 +67,14 @@ def explore():
 #Funcionalidades de login e cadastro do usuário
 @app.route('/logout')
 def logout():
-    """Sair do login do usuário"""
+    """Saí do login do usuário"""
     logout_user()
     return redirect(url_for('login'))
 
 @app.route('/')
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """Autenticação do usuário"""
+    """Faz a autenticação do usuário"""
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -84,7 +92,7 @@ def login():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    """Cadastrar um novo usuário"""
+    """Cadastra um novo usuário"""
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegistrationForm()
@@ -101,7 +109,7 @@ def register():
 #Funcionalidades de seguir e parar de seguir usuário
 @app.route('/follow/<username>', methods=['GET', 'POST'])
 def follow(username):
-    """Seguir usuários"""
+    """Segue um usuário"""
     user = User.query.filter_by(username=username).first()
     if user is None:
         flash('Usuário {} não encontrado.'.format(username))
@@ -116,7 +124,7 @@ def follow(username):
 
 @app.route('/unfollow/<username>', methods=['GET', 'POST'])
 def unfollow(username):
-    """Parar de seguir usuários"""
+    """Para de seguir um usuário"""
     user = User.query.filter_by(username=username).first()
     if user is None:
         flash('Usuário {} não encontrado.'.format(username))

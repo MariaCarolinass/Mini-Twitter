@@ -1,8 +1,10 @@
 from datetime import datetime
-from app import db, login
+from app import app, db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
+from itsdangerous import (TimedJSONWebSignatureSerializer
+                            as Serializer, BadSignature, SignatureExpired)
 
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
@@ -40,30 +42,71 @@ class User(UserMixin, db.Model):
             'email': self.email
         }
 
+    # Perfil do usuário
     def avatar(self, size):
+        """Carrega um avatar para o usuário"""
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
-            
+
+    # Token de autenticação
+    def generate_auth_token(self, expiration=600):
+        """Gerar um novo token de autenticação"""
+        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        """Verifica o token de autenticação"""
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None     # Token válido, mas expirado
+        except BadSignature:
+            return None     # token inválido
+        user = User.query.get(data['id'])
+        return user
+
+    def verify_password(username_or_token, password):
+        """Verifica como o usuário autenticou"""
+        # Autenticação por token
+        user = User.verify_auth_token(username_or_token)
+        if not user:
+            # Autenticação por email e senha
+            user = User.query.filter_by(username=username_or_token).first()
+            if not user or not user.verify_password(password):
+                return False
+            g.user = user
+            return True
+
+    # Hash de senha
     def set_password(self, password):
+        """Modifica a senha para hash de senha"""
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
+        """Checa a senha"""
         return check_password_hash(self.password_hash, password)
 
+    # Seguidores do usuário
     def follow(self, user):
+        """Seguir usuário"""
         if not self.is_following(user):
             self.followed.append(user)
 
     def unfollow(self, user):
+        """Parar de seguir usuário"""
         if self.is_following(user):
             self.followed.remove(user)
 
     def is_following(self, user):
+        """Contar seguidores do usuário"""
         return self.followed.filter(
             followers.c.followed_id == user.id).count() > 0
 
     def followed_posts(self):
+        """Ligação dos dados de usuário com seguidores"""
         followed = Post.query.join(
             followers, (followers.c.followed_id == Post.user_id)).filter(
                 followers.c.follower_id == self.id)
