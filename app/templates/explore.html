@@ -18,4 +18,11 @@
     <p>{{ posts.message }}</p><br>
   {% endfor %}<br>
 
+  {% if prev_url %}
+    <h4><a href="{{ prev_url }}">Postagens recentes</a></h4>
+  {% endif %}
+  {% if next_url %}
+    <h4><a href="{{ next_url }}">Postagens antigas</a></h4>
+  {% endif %}
+
 {% endblock %}
