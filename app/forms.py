@@ -5,6 +5,8 @@ from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, \
     Length
 from app.models import User, Post
 
+
+# Formulário de autenticação do usuário
 class LoginForm(FlaskForm):
     email = StringField('E-mail:', validators=[DataRequired(),
         Length(min=1, max=110)], render_kw={"placeholder": "Digite o seu \
@@ -14,6 +16,8 @@ endereço de e-mail"})
     remember_me = BooleanField('Lembre de mim')
     submit = SubmitField('Entrar')
 
+
+# Formulário de cadastro do usuário
 class RegistrationForm(FlaskForm):
     username = StringField('Nome:', validators=[DataRequired(),
         Length(min=1, max=75)], render_kw={"placeholder": "Digite o seu nome"})
@@ -30,15 +34,19 @@ endereço de e-mail"})
     submit = SubmitField('Cadastrar')
 
     def validate_nickname(self, nickname):
+        """Validação para o apelido do usuário não ser repetido"""
         user = User.query.filter_by(nickname=nickname.data).first()
         if user is not None:
             raise ValidationError('Por favor use um apelido diferente.')
 
     def validate_email(self, email):
+        """Validação para o email do usuário não ser repetido"""
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Por favor use um endereço de e-mail diferente.')
 
+
+# Formulário de cadastro da postagem
 class RegisterPost(FlaskForm):
     message = TextAreaField('Digite uma postagem:', validators=[DataRequired(),
         Length(min=1, max=150)], render_kw={"placeholder": "O que está havendo?"})
