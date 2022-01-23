@@ -108,7 +108,90 @@ Entre no seu navegador e acesse o endereço abaixo:
 http://localhost:5000/
 ```
 
-## Licença
+## Documentação da API
+
+#### Informações da API
+
+```http
+  GET /api
+```
+
+#### Faz a autenticação do usuário
+
+```http
+  GET /
+  GET /login
+  Post /login
+```
+
+#### Saí do login do usuário
+
+```http
+  GET /logout
+```
+
+#### Solicita token de autenticação
+
+```http
+  GET /api/token
+```
+
+#### Carrega todos os dados das postagens
+
+```http
+  GET /api/register_posts
+```
+
+#### Carrega todos os dados dos usuários
+
+```http
+  GET /api/register_users
+```
+
+#### Mostra todas as postagens dos usuários
+
+```http
+  GET /explore
+```
+
+#### Cadastra e exibe uma nova postagem
+
+```http
+  GET /index
+  Post /index
+```
+
+#### Cadastra um novo usuário
+
+```http
+  GET /register
+  Post /register
+```
+
+#### Segue um usuário
+
+```http
+  GET /follow/{username}
+  Post /follow/{username}
+```
+
+#### Para de seguir um usuário
+
+```http
+  GET /unfollow/{username}
+  Post /unfollow/{username}
+```
+
+### Para acessar a Documentação
+
+```sh
+$ flask run
+
+http://127.0.0.1:5000/apidoc/swagger
+http://127.0.0.1:5000/apidoc/redoc
+```
+
+## Licença do projeto
 
 [GPL-3.0](https://github.com/MariaCarolinass/Mini-Twitter/blob/main/LICENSE).
 
