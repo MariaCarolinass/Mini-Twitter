@@ -118,7 +118,7 @@ http://localhost:5000/
 
 #### Faz a autenticação do usuário
 
-```http
+```sh
   GET /
   GET /login
   Post /login
@@ -126,58 +126,58 @@ http://localhost:5000/
 
 #### Saí do login do usuário
 
-```http
+```sh
   GET /logout
 ```
 
 #### Solicita token de autenticação
 
-```http
+```sh
   GET /api/token
 ```
 
 #### Carrega todos os dados das postagens
 
-```http
+```sh
   GET /api/register_posts
 ```
 
 #### Carrega todos os dados dos usuários
 
-```http
+```sh
   GET /api/register_users
 ```
 
 #### Mostra todas as postagens dos usuários
 
-```http
+```sh
   GET /explore
 ```
 
 #### Cadastra e exibe uma nova postagem
 
-```http
+```sh
   GET /index
   Post /index
 ```
 
 #### Cadastra um novo usuário
 
-```http
+```sh
   GET /register
   Post /register
 ```
 
 #### Segue um usuário
 
-```http
+```sh
   GET /follow/{username}
   Post /follow/{username}
 ```
 
 #### Para de seguir um usuário
 
-```http
+```sh
   GET /unfollow/{username}
   Post /unfollow/{username}
 ```
