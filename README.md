@@ -112,7 +112,7 @@ http://localhost:5000/
 
 #### Informações da API
 
-```http
+```sh
   GET /api
 ```
 
