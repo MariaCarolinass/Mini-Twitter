@@ -39,9 +39,16 @@ $ python3 -m venv venv
 
 Acesse o Virtualenv:
 
+- Para Linux:
+
 ```sh
-$ source venv/bin/activate       (Linux)
-$ source venv\Script\activate    (Windows)
+$ source venv/bin/activate
+```
+
+- Para Windows:
+
+```sh
+$ source venv\Script\activate
 ```
 
 Instale a lista de pacotes do projeto:
@@ -187,8 +194,8 @@ http://localhost:5000/
 ```sh
 $ flask run
 
-http://127.0.0.1:5000/apidoc/swagger
-http://127.0.0.1:5000/apidoc/redoc
+- http://127.0.0.1:5000/apidoc/swagger
+- http://127.0.0.1:5000/apidoc/redoc
 ```
 
 ## Licença do projeto
