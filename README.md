@@ -198,3 +198,11 @@ http://127.0.0.1:5000/apidoc/redoc
 ## Contato
 
 Telegram - [@carols0](https://t.me/carols0)
+
+## Referência
+
+- [Aplicação web com python + Flask + PostgreSQL e deploy no Heroku](https://medium.com/@dushan14/create-a-web-application-with-python-flask-postgresql-and-deploy-on-heroku-243d548335cc)
+- [Configurando Postgres, SQLAlchemy e Alembic](https://realpython.com/flask-by-example-part-2-postgres-sqlalchemy-and-alembic/)
+- [Autenticação com Flask](https://blog.miguelgrinberg.com/post/restful-authentication-with-flask)
+- [Mega Tutorial de Flask - Miguel Grinberg](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
+- [Criador de diagramas e fluxogramas - Draw.io](https://app.diagrams.net/)
