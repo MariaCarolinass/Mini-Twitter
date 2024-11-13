@@ -204,7 +204,7 @@ $ flask run
 
 ## Contato
 
-Telegram - [@carols0](https://t.me/carols0)
+[@carolsoaresm](https://t.me/carolsoaresm) (Telegram)
 
 ## Referência
 
